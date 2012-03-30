@@ -1,29 +1,15 @@
-# ActiveRecordDeprecatedFinders
+# Active Record Deprecated Finders
 
-TODO: Write a gem description
+This gem will be used to extract and deprecate old-style finder option
+hashes in Active Record:
 
-## Installation
+``` ruby
+Post.find(:all, conditions: { published_on: 2.weeks.ago }, limit: 5)
+```
 
-Add this line to your application's Gemfile:
+It will be a dependency of Rails 4.0 to provide to deprecated
+functionality.
 
-    gem 'active_record_deprecated_finders'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install active_record_deprecated_finders
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+It will be removed as a dependency in Rails 4.1, but users can manually
+include it in their Gemfile and it will continue to be maintained until
+Rails 5.
