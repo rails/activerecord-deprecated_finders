@@ -7,7 +7,7 @@ hashes in Active Record:
 Post.find(:all, conditions: { published_on: 2.weeks.ago }, limit: 5)
 ```
 
-It will be a dependency of Rails 4.0 to provide to deprecated
+It will be a dependency of Rails 4.0 to provide the deprecated
 functionality.
 
 It will be removed as a dependency in Rails 4.1, but users can manually
