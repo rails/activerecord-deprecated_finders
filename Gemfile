@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 if ENV['RAILS']
-  gem 'rails', path: ENV['rails']
+  gem 'rails', path: ENV['RAILS']
 else
   gem 'rails', git: 'git://github.com/rails/rails'
 end
