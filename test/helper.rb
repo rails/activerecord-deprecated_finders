@@ -14,4 +14,5 @@ ActiveRecord::Schema.define do
 end
 
 class Post < ActiveRecord::Base
+  attr_accessible :id, :title
 end

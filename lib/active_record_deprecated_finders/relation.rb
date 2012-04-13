@@ -56,6 +56,49 @@ module ActiveRecord
           super
         end
       end
+
+      def find(*args)
+        options = args.extract_options!
+
+        if options.present?
+          apply_finder_options(options).find(*args)
+        else
+          case args.first
+          when :first, :last, :all
+            send(args.first)
+          else
+            super
+          end
+        end
+      end
+
+      def first(*args)
+        if args.any?
+          if args.first.kind_of?(Integer) || (loaded? && !args.first.kind_of?(Hash))
+            super
+          else
+            apply_finder_options(args.first).first
+          end
+        else
+          super
+        end
+      end
+
+      def last(*args)
+        if args.any?
+          if args.first.kind_of?(Integer) || (loaded? && !args.first.kind_of?(Hash))
+            super
+          else
+            apply_finder_options(args.first).last
+          end
+        else
+          super
+        end
+      end
+
+      def all(*args)
+        args.any? ? apply_finder_options(args.first).all : super
+      end
     end
 
     include DeprecatedMethods
