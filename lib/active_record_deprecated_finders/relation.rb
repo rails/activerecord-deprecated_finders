@@ -47,6 +47,15 @@ module ActiveRecord
           super
         end
       end
+
+      def calculate(operation, column_name, options = {})
+        if options.except(:distinct).present?
+          apply_finder_options(options.except(:distinct))
+            .calculate(operation, column_name, :distinct => options[:distinct])
+        else
+          super
+        end
+      end
     end
 
     include DeprecatedMethods
