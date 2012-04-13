@@ -1,6 +1,6 @@
 module ActiveRecord
   class Relation
-    VALID_FIND_OPTIONS = [ :conditions, :include, :joins, :limit, :offset, :extend, :references,
+    VALID_FIND_OPTIONS = [ :conditions, :include, :joins, :limit, :offset, :extend,
                            :order, :select, :readonly, :group, :having, :from, :lock ]
 
     def apply_finder_options(options)

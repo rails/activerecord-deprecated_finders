@@ -33,7 +33,7 @@ describe 'apply_finder_options' do
   end
 
   it "does not support :references (as it's new in 4.0)" do
-    # TODO
+    lambda { Post.scoped.apply_finder_options(references: :foo) }.must_raise ArgumentError
   end
 
   it 'supports :order' do
