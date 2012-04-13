@@ -1,3 +1,5 @@
+require 'active_support/core_ext/module/aliasing'
+
 module ActiveRecord
   class Relation
     VALID_FIND_OPTIONS = [ :conditions, :include, :joins, :limit, :offset, :extend,
@@ -21,5 +23,16 @@ module ActiveRecord
 
       relation
     end
+
+    def update_all_with_deprecated_options(updates, conditions = nil, options = {})
+      if conditions || options.present?
+        where(conditions)
+          .apply_finder_options(options.slice(:limit, :order))
+          .update_all_without_deprecated_options(updates)
+      else
+        update_all_without_deprecated_options(updates)
+      end
+    end
+    alias_method_chain :update_all, :deprecated_options
   end
 end
