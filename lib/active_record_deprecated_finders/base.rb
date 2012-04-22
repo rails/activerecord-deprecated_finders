@@ -11,9 +11,26 @@ module ActiveRecord
       end
     end
 
+    class CallableScope
+      def initialize(klass, callable)
+        @klass    = klass
+        @callable = callable
+      end
+
+      def call(*args)
+        result = @callable.call(*args)
+
+        if result.is_a?(Hash)
+          @klass.unscoped.apply_finder_options(result)
+        else
+          result
+        end
+      end
+    end
+
     def default_scope(scope = {})
       scope = FinderHashScope.new(self, scope) if scope.is_a?(Hash)
-      super(scope)
+      super
     end
 
     def scoped(options = nil)
@@ -22,6 +39,16 @@ module ActiveRecord
       else
         super
       end
+    end
+
+    def scope(name, body = {}, &block)
+      if body.is_a?(Hash)
+        body = FinderHashScope.new(self, body)
+      elsif !body.is_a?(Relation) && body.respond_to?(:call)
+        body = CallableScope.new(self, body)
+      end
+
+      super
     end
   end
 
