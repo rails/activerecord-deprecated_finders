@@ -27,4 +27,10 @@ describe 'with_scope' do
       end
     end
   end
+
+  it 'gives a deprecation for #with_exclusive_scope' do
+    assert_deprecated do
+      Post.send(:with_exclusive_scope) {}
+    end
+  end
 end

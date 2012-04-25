@@ -55,8 +55,9 @@ module ActiveRecord
 
     def with_scope(scope = {}, action = :merge)
       ActiveSupport::Deprecation.warn(
-        "ActiveRecord::Base#with_scope is deprecated. Please use" \
-        "ActiveRecord::Relation#scoping instead."
+        "ActiveRecord::Base#with_scope and #with_exclusive_scope are deprecated. " \
+        "Please use ActiveRecord::Relation#scoping instead. (You can use #merge " \
+        "to merge multiple scopes together.)"
       )
 
       # If another Active Record class has been passed in, get its current scope
