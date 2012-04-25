@@ -16,3 +16,10 @@ end
 class Post < ActiveRecord::Base
   attr_accessible :id, :title
 end
+
+require 'active_support/testing/deprecation'
+ActiveSupport::Deprecation.debug = true
+
+class MiniTest::Spec
+  include ActiveSupport::Testing::Deprecation
+end

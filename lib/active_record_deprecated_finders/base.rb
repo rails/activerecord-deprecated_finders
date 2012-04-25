@@ -1,3 +1,5 @@
+require 'active_support/deprecation'
+
 module ActiveRecord
   module DeprecatedFinders
     class FinderHashScope
@@ -52,6 +54,11 @@ module ActiveRecord
     end
 
     def with_scope(scope = {}, action = :merge)
+      ActiveSupport::Deprecation.warn(
+        "ActiveRecord::Base#with_scope is deprecated. Please use" \
+        "ActiveRecord::Relation#scoping instead."
+      )
+
       # If another Active Record class has been passed in, get its current scope
       scope = scope.current_scope if !scope.is_a?(Relation) && scope.respond_to?(:current_scope)
 

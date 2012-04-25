@@ -11,15 +11,19 @@ describe 'with_scope' do
   end
 
   it 'applies a scoping' do
-    Post.with_scope(find: { conditions: { title: 'foo' } }) do
-      assert_equal [1], Post.all.map(&:id)
+    assert_deprecated do
+      Post.with_scope(find: { conditions: { title: 'foo' } }) do
+        assert_equal [1], Post.all.map(&:id)
+      end
     end
   end
 
   it 'applies an exclusive scoping' do
-    Post.with_scope(find: { conditions: { title: 'foo' } }) do
-      Post.send(:with_exclusive_scope, find: { conditions: { title: 'bar' } }) do
-        assert_equal [2], Post.all.map(&:id)
+    ActiveSupport::Deprecation.silence do
+      Post.with_scope(find: { conditions: { title: 'foo' } }) do
+        Post.send(:with_exclusive_scope, find: { conditions: { title: 'bar' } }) do
+          assert_equal [2], Post.all.map(&:id)
+        end
       end
     end
   end
