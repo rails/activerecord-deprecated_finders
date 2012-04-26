@@ -14,7 +14,7 @@ describe 'finders' do
   end
 
   it 'supports find(:all) with options' do
-    Post.find(:all, conditions: 'id >= 2').must_equal [@posts[1], @posts[2]]
+    assert_deprecated { Post.find(:all, conditions: 'id >= 2') }.must_equal [@posts[1], @posts[2]]
   end
 
   it 'supports all with options' do
@@ -26,7 +26,7 @@ describe 'finders' do
   end
 
   it 'supports find(:first) with options' do
-    Post.order(:id).find(:first, conditions: 'id >= 2').must_equal @posts[1]
+    assert_deprecated { Post.order(:id).find(:first, conditions: 'id >= 2') }.must_equal @posts[1]
   end
 
   it 'supports first with options' do
@@ -38,7 +38,7 @@ describe 'finders' do
   end
 
   it 'supports find(:last) with options' do
-    Post.order(:id).find(:last, conditions: 'id <= 2').must_equal @posts[1]
+    assert_deprecated { Post.order(:id).find(:last, conditions: 'id <= 2') }.must_equal @posts[1]
   end
 
   it 'supports last with options' do

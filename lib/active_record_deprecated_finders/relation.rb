@@ -90,6 +90,13 @@ module ActiveRecord
 
           case finder = args.first
           when :first, :last, :all
+            ActiveSupport::Deprecation.warn(
+              "Calling #find(#{finder.inspect}) is deprecated. Please call " \
+              "##{finder} directly instead. You have also used finder options. " \
+              "These are also deprecated. Please build a scope instead of using " \
+              "finder options."
+            )
+
             scope.send(finder)
           else
             scope.find(*args)
