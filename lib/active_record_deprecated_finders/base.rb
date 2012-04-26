@@ -28,12 +28,15 @@ module ActiveRecord
           result = @scope.call(*args)
 
           if result.is_a?(Hash)
-            ActiveSupport::Deprecation.warn(
-              "Returning a hash from a #scope or #default_scope block is deprecated. Please " \
+            msg = "Returning a hash from a #scope or #default_scope block is deprecated. Please " \
               "return an actual scope object instead. E.g. scope :red, -> { where(color: 'red') } " \
-              "rather than scope :red, -> { { conditions: { color: 'red' } } }. (Inspecting the proc " \
-              "gives #{@scope.inspect} - this may help you find it."
-            )
+              "rather than scope :red, -> { { conditions: { color: 'red' } } }. "
+
+            if @scope.respond_to?(:source_location)
+              msg << "(The scope was defined at #{@scope.source_location.join(':')}.)"
+            end
+
+            ActiveSupport::Deprecation.warn(msg)
           end
         else
           result = @scope
