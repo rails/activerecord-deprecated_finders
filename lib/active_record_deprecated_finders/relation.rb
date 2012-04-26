@@ -104,6 +104,11 @@ module ActiveRecord
           if args.first.kind_of?(Integer) || (loaded? && !args.first.kind_of?(Hash))
             super
           else
+            ActiveSupport::Deprecation.warn(
+              "Relation#first with finder options is deprecated. Please build " \
+              "a scope and then call #first on it instead."
+            )
+
             apply_finder_options(args.first).first
           end
         end
