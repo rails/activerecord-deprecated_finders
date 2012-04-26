@@ -10,6 +10,6 @@ describe 'calculate' do
     Post.create id: 2, title: 'foo'
     Post.create id: 3, title: 'foo'
 
-    Post.calculate(:sum, :id, conditions: { title: 'foo' }).must_equal 5
+    assert_deprecated { Post.calculate(:sum, :id, conditions: { title: 'foo' }) }.must_equal 5
   end
 end

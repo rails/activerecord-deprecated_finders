@@ -9,8 +9,10 @@ describe 'find_in_batches' do
     foo = Post.create title: 'foo'
     Post.create title: 'bar'
 
-    Post.find_in_batches(conditions: "title = 'foo'") do |records|
-      records.must_equal [foo]
+    assert_deprecated do
+      Post.find_in_batches(conditions: "title = 'foo'") do |records|
+        records.must_equal [foo]
+      end
     end
   end
 end

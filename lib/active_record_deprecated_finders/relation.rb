@@ -53,6 +53,11 @@ module ActiveRecord
 
       def find_in_batches(options = {}, &block)
         if (finder_options = options.except(:start, :batch_size)).present?
+          ActiveSupport::Deprecation.warn(
+            "Relation#find_in_batches with finder options is deprecated. Please build " \
+            "a scope and then call find_in_batches on it instead."
+          )
+
           raise "You can't specify an order, it's forced to be #{batch_order}" if options[:order].present?
           raise "You can't specify a limit, it's forced to be the batch_size"  if options[:limit].present?
 
@@ -65,6 +70,11 @@ module ActiveRecord
 
       def calculate(operation, column_name, options = {})
         if options.except(:distinct).present?
+          ActiveSupport::Deprecation.warn(
+            "Relation#calculate with finder options is deprecated. Please build " \
+            "a scope and then call find_in_batches on it instead."
+          )
+
           apply_finder_options(options.except(:distinct))
             .calculate(operation, column_name, :distinct => options[:distinct])
         else
