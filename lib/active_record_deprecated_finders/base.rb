@@ -29,9 +29,10 @@ module ActiveRecord
 
           if result.is_a?(Hash)
             ActiveSupport::Deprecation.warn(
-              "Return a hash from a #scope or #default_scope block is deprecated. Please " \
-              "return an actual scope object instead. E.g. scope :red, -> { where(color: 'red') } "\
-              "rather than scope :red, -> { { conditions: { color: 'red' } } }."
+              "Returning a hash from a #scope or #default_scope block is deprecated. Please " \
+              "return an actual scope object instead. E.g. scope :red, -> { where(color: 'red') } " \
+              "rather than scope :red, -> { { conditions: { color: 'red' } } }. (Inspecting the proc " \
+              "gives #{@scope.inspect} - this may help you find it."
             )
           end
         else
