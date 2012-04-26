@@ -18,7 +18,7 @@ describe 'finders' do
   end
 
   it 'supports all with options' do
-    Post.all(conditions: 'id >= 2').must_equal [@posts[1], @posts[2]]
+    assert_deprecated { Post.all(conditions: 'id >= 2') }.must_equal [@posts[1], @posts[2]]
   end
 
   it 'supports find(:first) with no options' do

@@ -135,6 +135,11 @@ module ActiveRecord
         if args.empty?
           super
         else
+          ActiveSupport::Deprecation.warn(
+            "Relation#all with finder options is deprecated. Please build " \
+            "a scope and then call #all on it instead."
+          )
+
           apply_finder_options(args.first).all
         end
       end
