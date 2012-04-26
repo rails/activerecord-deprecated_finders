@@ -121,6 +121,11 @@ module ActiveRecord
           if args.first.kind_of?(Integer) || (loaded? && !args.first.kind_of?(Hash))
             super
           else
+            ActiveSupport::Deprecation.warn(
+              "Relation#last with finder options is deprecated. Please build " \
+              "a scope and then call #last on it instead."
+            )
+
             apply_finder_options(args.first).last
           end
         end

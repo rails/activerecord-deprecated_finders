@@ -42,6 +42,6 @@ describe 'finders' do
   end
 
   it 'supports last with options' do
-    Post.order(:id).last(conditions: 'id <= 2').must_equal @posts[1]
+    assert_deprecated { Post.order(:id).last(conditions: 'id <= 2') }.must_equal @posts[1]
   end
 end
