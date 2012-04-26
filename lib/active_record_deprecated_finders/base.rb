@@ -2,25 +2,41 @@ require 'active_support/deprecation'
 
 module ActiveRecord
   module DeprecatedFinders
-    class FinderHashScope
-      def initialize(klass, hash)
+    class ScopeWrapper
+      def self.wrap(klass, scope)
+        if scope.is_a?(Hash)
+          ActiveSupport::Deprecation.warn(
+            "Calling #scope or #default_scope with a hash is deprecated. Please use a lambda " \
+            "containing a scope. E.g. scope :red, -> { where(color: 'red') }"
+          )
+
+          new(klass, scope)
+        elsif !scope.is_a?(Relation) && scope.respond_to?(:call)
+          new(klass, scope)
+        else
+          scope
+        end
+      end
+
+      def initialize(klass, scope)
         @klass = klass
-        @hash  = hash
-      end
-
-      def call
-        @klass.unscoped.apply_finder_options(@hash)
-      end
-    end
-
-    class CallableScope
-      def initialize(klass, callable)
-        @klass    = klass
-        @callable = callable
+        @scope = scope
       end
 
       def call(*args)
-        result = @callable.call(*args)
+        if @scope.respond_to?(:call)
+          result = @scope.call(*args)
+
+          if result.is_a?(Hash)
+            ActiveSupport::Deprecation.warn(
+              "Return a hash from a #scope or #default_scope block is deprecated. Please " \
+              "return an actual scope object instead. E.g. scope :red, -> { where(color: 'red') } "\
+              "rather than scope :red, -> { { conditions: { color: 'red' } } }."
+            )
+          end
+        else
+          result = @scope
+        end
 
         if result.is_a?(Hash)
           @klass.unscoped.apply_finder_options(result)
@@ -30,17 +46,12 @@ module ActiveRecord
       end
     end
 
-    def default_scope(scope = {})
-      if scope.is_a?(Hash) && !block_given?
-        ActiveSupport::Deprecation.warn(
-          "Calling default_scope with a hash is deprecated. Please pass a block " \
-          "containing a scope. E.g. default_scope { where(color: 'red') }"
-        )
-
-        scope = FinderHashScope.new(self, scope)
+    def default_scope(scope = {}, &block)
+      if block_given?
+        super ScopeWrapper.new(self, block), &nil
+      else
+        super ScopeWrapper.wrap(self, scope)
       end
-
-      super
     end
 
     def scoped(options = nil)
@@ -52,13 +63,7 @@ module ActiveRecord
     end
 
     def scope(name, body = {}, &block)
-      if body.is_a?(Hash)
-        body = FinderHashScope.new(self, body)
-      elsif !body.is_a?(Relation) && body.respond_to?(:call)
-        body = CallableScope.new(self, body)
-      end
-
-      super
+      super(name, ScopeWrapper.wrap(self, body), &block)
     end
 
     def with_scope(scope = {}, action = :merge)
