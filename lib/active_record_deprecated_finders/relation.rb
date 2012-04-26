@@ -88,9 +88,14 @@ module ActiveRecord
         if options.present?
           apply_finder_options(options).find(*args)
         else
-          case args.first
+          case finder = args.first
           when :first, :last, :all
-            send(args.first)
+            ActiveSupport::Deprecation.warn(
+              "Calling #find(#{finder.inspect}) is deprecated. Please call " \
+              "##{finder} directly instead."
+            )
+
+            send(finder)
           else
             super
           end

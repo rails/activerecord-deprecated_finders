@@ -10,7 +10,7 @@ describe 'finders' do
   end
 
   it 'supports find(:all) with no options' do
-    Post.find(:all).must_equal @posts
+    assert_deprecated { Post.find(:all) }.must_equal @posts
   end
 
   it 'supports find(:all) with options' do
@@ -22,7 +22,7 @@ describe 'finders' do
   end
 
   it 'supports find(:first) with no options' do
-    Post.order(:id).find(:first).must_equal @posts.first
+    assert_deprecated { Post.order(:id).find(:first) }.must_equal @posts.first
   end
 
   it 'supports find(:first) with options' do
@@ -34,7 +34,7 @@ describe 'finders' do
   end
 
   it 'supports find(:last) with no options' do
-    Post.order(:id).find(:last).must_equal @posts.last
+    assert_deprecated { Post.order(:id).find(:last) }.must_equal @posts.last
   end
 
   it 'supports find(:last) with options' do
