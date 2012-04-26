@@ -27,13 +27,28 @@ module ActiveRecord
       end
 
       def update_all_with_deprecated_options(updates, conditions = nil, options = {})
-        if conditions || options.present?
-          where(conditions)
-            .apply_finder_options(options.slice(:limit, :order))
-            .update_all_without_deprecated_options(updates)
-        else
-          update_all_without_deprecated_options(updates)
+        scope = self
+
+        if conditions
+          scope = where(conditions)
+
+          ActiveSupport::Deprecation.warn(
+            "Relation#update_all with conditions is deprecated. Please use " \
+            "Item.where(color: 'red').update_all(...) rather than " \
+            "Item.update_all(..., color: 'red')."
+          )
         end
+
+        if options.present?
+          scope = scope.apply_finder_options(options.slice(:limit, :order))
+
+          ActiveSupport::Deprecation.warn(
+            "Relation#update_all with :limit / :order options is deprecated. " \
+            "Please use e.g. Post.limit(1).order(:foo).update_all instead."
+          )
+        end
+
+        scope.update_all_without_deprecated_options(updates)
       end
 
       def find_in_batches(options = {}, &block)

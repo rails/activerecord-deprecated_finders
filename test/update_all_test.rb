@@ -9,7 +9,7 @@ describe 'update_all' do
     foo = Post.create title: 'foo'
     bar = Post.create title: 'bar'
 
-    Post.update_all({ title: 'omg' }, title: 'foo')
+    assert_deprecated { Post.update_all({ title: 'omg' }, title: 'foo') }
 
     foo.reload.title.must_equal 'omg'
     bar.reload.title.must_equal 'bar'
@@ -17,7 +17,7 @@ describe 'update_all' do
 
   it 'supports limit and order' do
     posts = 3.times.map { Post.create }
-    Post.update_all({ title: 'omg' }, {}, limit: 2, order: :id)
+    assert_deprecated { Post.update_all({ title: 'omg' }, nil, limit: 2, order: :id) }
 
     posts.each(&:reload).map(&:title).must_equal ['omg', 'omg', nil]
   end
