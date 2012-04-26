@@ -98,31 +98,35 @@ module ActiveRecord
       end
 
       def first(*args)
-        if args.any?
+        if args.empty?
+          super
+        else
           if args.first.kind_of?(Integer) || (loaded? && !args.first.kind_of?(Hash))
             super
           else
             apply_finder_options(args.first).first
           end
-        else
-          super
         end
       end
 
       def last(*args)
-        if args.any?
+        if args.empty?
+          super
+        else
           if args.first.kind_of?(Integer) || (loaded? && !args.first.kind_of?(Hash))
             super
           else
             apply_finder_options(args.first).last
           end
-        else
-          super
         end
       end
 
       def all(*args)
-        args.any? ? apply_finder_options(args.first).all : super
+        if args.empty?
+          super
+        else
+          apply_finder_options(args.first).all
+        end
       end
     end
 
