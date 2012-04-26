@@ -97,6 +97,11 @@ module ActiveRecord
         else
           case finder = args.first
           when :first, :last, :all
+            ActiveSupport::Deprecation.warn(
+              "Calling #find(#{finder.inspect}) is deprecated. Please call " \
+              "##{finder} directly instead."
+            )
+
             send(finder)
           else
             super
