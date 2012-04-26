@@ -12,19 +12,21 @@ describe 'default scope' do
   end
 
   it 'works with a finder hash' do
-    klass = Class.new(Post) do
-      self.table_name = 'posts'
-      default_scope conditions: { id: 1 }
-    end
-    assert_equal [1], klass.all.map(&:id)
+    klass = Class.new(Post)
+    klass.table_name = 'posts'
+    assert_deprecated { klass.default_scope conditions: { id: 1 } }
+
+    klass.all.map(&:id).must_equal [1]
   end
 
   it 'works with a finder hash and a scope' do
-    klass = Class.new(Post) do
-      self.table_name = 'posts'
-      default_scope { where("title like '%foo%'") }
-      default_scope conditions: "title like '%omg%'"
+    klass = Class.new(Post)
+    klass.table_name = 'posts'
+    klass.default_scope { klass.where("title like '%foo%'") }
+    ActiveSupport::Deprecation.silence do
+      klass.default_scope conditions: "title like '%omg%'"
     end
-    assert_equal [2], klass.all.map(&:id)
+
+    klass.all.map(&:id).must_equal [2]
   end
 end

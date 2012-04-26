@@ -31,7 +31,15 @@ module ActiveRecord
     end
 
     def default_scope(scope = {})
-      scope = FinderHashScope.new(self, scope) if scope.is_a?(Hash)
+      if scope.is_a?(Hash) && !block_given?
+        ActiveSupport::Deprecation.warn(
+          "Calling default_scope with a hash is deprecated. Please pass a block " \
+          "containing a scope. E.g. default_scope { where(color: 'red') }"
+        )
+
+        scope = FinderHashScope.new(self, scope)
+      end
+
       super
     end
 
