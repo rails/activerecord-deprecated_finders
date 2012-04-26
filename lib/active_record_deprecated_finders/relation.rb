@@ -86,11 +86,18 @@ module ActiveRecord
         options = args.extract_options!
 
         if options.present?
-          apply_finder_options(options).find(*args)
-        else
-          case args.first
+          scope = apply_finder_options(options)
+
+          case finder = args.first
           when :first, :last, :all
-            send(args.first)
+            scope.send(finder)
+          else
+            scope.find(*args)
+          end
+        else
+          case finder = args.first
+          when :first, :last, :all
+            send(finder)
           else
             super
           end
