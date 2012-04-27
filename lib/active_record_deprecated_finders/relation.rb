@@ -99,6 +99,11 @@ module ActiveRecord
 
             scope.send(finder)
           else
+            ActiveSupport::Deprecation.warn(
+              "Passing options to #find is deprecated. Please build a scope " \
+              "and then call #find on it."
+            )
+
             scope.find(*args)
           end
         else

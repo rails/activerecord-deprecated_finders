@@ -44,4 +44,11 @@ describe 'finders' do
   it 'supports last with options' do
     assert_deprecated { Post.order(:id).last(conditions: 'id <= 2') }.must_equal @posts[1]
   end
+
+  it 'support find(1) etc with options' do
+    assert_deprecated do
+      Post.find(1, conditions: '1=1').must_equal Post.find(1)
+      lambda { Post.find(1, conditions: '0=1') }.must_raise(ActiveRecord::RecordNotFound)
+    end
+  end
 end
