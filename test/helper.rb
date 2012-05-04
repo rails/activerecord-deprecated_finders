@@ -10,11 +10,12 @@ ActiveRecord::Schema.verbose = false
 ActiveRecord::Schema.define do
   create_table :posts do |t|
     t.string :title
+    t.string :category
   end
 end
 
 class Post < ActiveRecord::Base
-  attr_accessible :id, :title
+  attr_accessible :id, :title, :category
 end
 
 require 'active_support/testing/deprecation'
