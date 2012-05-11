@@ -11,6 +11,7 @@ describe 'dynamic_methods' do
 
   after do
     Post.delete_all
+    Comment.delete_all
   end
 
   it 'supports find_all_by' do
@@ -87,5 +88,25 @@ describe 'dynamic_methods' do
 
   it 'supports find_by! with a block' do
     Post.find_by_title!('foo') { |r| [r, 'block'] }.must_equal [@posts[0], 'block']
+  end
+
+  it 'adds to an association when find_or_initialize_by is called' do
+    post = @posts.first
+    comment = post.comments.find_or_initialize_by_title('omg')
+    post.comments.must_equal [comment]
+  end
+
+  it 'adds to an association when find_or_create_by is called' do
+    post = @posts.first
+    post.comments.load_target
+
+    comment = post.comments.find_or_create_by_title('omg')
+    post.comments.must_equal [comment]
+    post.reload.comments.must_equal [comment]
+  end
+
+  it "doesn't mess with method_missing for non-find_or_{initialize|create}_by methods" do
+    post = @posts.first
+    post.comments.lol.must_equal 'lol'
   end
 end

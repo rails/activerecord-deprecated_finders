@@ -12,10 +12,22 @@ ActiveRecord::Schema.define do
     t.string :title
     t.string :category
   end
+
+  create_table :comments do |t|
+    t.string :title
+    t.references :post
+  end
 end
 
 class Post < ActiveRecord::Base
   attr_accessible :id, :title, :category
+  has_many :comments
+end
+
+class Comment < ActiveRecord::Base
+  def self.lol
+    "lol"
+  end
 end
 
 require 'active_support/testing/deprecation'
