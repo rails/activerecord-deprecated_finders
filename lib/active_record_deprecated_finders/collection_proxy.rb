@@ -1,9 +1,6 @@
 module ActiveRecord
   module Associations
     class CollectionProxy
-      alias method_missing_without_dynamic_instantiator method_missing
-      remove_method :method_missing
-
       def method_missing(method, *args, &block)
         match = DynamicMatchers::Method.match(klass, method)
 
@@ -13,7 +10,7 @@ module ActiveRecord
             yield record if block_given?
           end
         else
-          method_missing_without_dynamic_instantiator(method, *args, &block)
+          super
         end
       end
     end
