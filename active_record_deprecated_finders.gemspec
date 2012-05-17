@@ -4,8 +4,8 @@ require File.expand_path('../lib/active_record_deprecated_finders/version', __FI
 Gem::Specification.new do |gem|
   gem.authors       = ["Jon Leighton"]
   gem.email         = ["j@jonathanleighton.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{This gem will be used to extract and deprecate old-style finder option hashes in Active Record.}
+  gem.summary       = %q{This gem will be used to extract and deprecate old-style finder option hashes in Active Record.}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)
