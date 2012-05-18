@@ -63,7 +63,7 @@ describe 'apply_finder_options' do
 
   it 'supports :from' do
     scope = Post.scoped.apply_finder_options(:from => :foo)
-    scope.from_value.must_equal :foo
+    scope.from_value.must_equal [:foo, nil]
   end
 
   it 'supports :lock' do
