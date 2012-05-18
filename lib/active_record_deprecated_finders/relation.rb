@@ -7,7 +7,11 @@ module ActiveRecord
       VALID_FIND_OPTIONS = [ :conditions, :include, :joins, :limit, :offset, :extend,
                              :order, :select, :readonly, :group, :having, :from, :lock ]
 
-      def apply_finder_options(options)
+      # The silence_deprecation arg is for internal use, where we have already output a
+      # deprecation further up the call stack.
+      def apply_finder_options(options, silence_deprecation = false)
+        ActiveSupport::Deprecation.warn("#apply_finder_options is deprecated") unless silence_deprecation
+
         relation = clone
         return relation unless options
 
@@ -40,7 +44,7 @@ module ActiveRecord
         end
 
         if options.present?
-          scope = scope.apply_finder_options(options.slice(:limit, :order))
+          scope = scope.apply_finder_options(options.slice(:limit, :order), true)
 
           ActiveSupport::Deprecation.warn(
             "Relation#update_all with :limit / :order options is deprecated. " \
@@ -61,7 +65,7 @@ module ActiveRecord
           raise "You can't specify an order, it's forced to be #{batch_order}" if options[:order].present?
           raise "You can't specify a limit, it's forced to be the batch_size"  if options[:limit].present?
 
-          apply_finder_options(finder_options).
+          apply_finder_options(finder_options, true).
             find_in_batches(options.slice(:start, :batch_size), &block)
         else
           super
@@ -75,7 +79,7 @@ module ActiveRecord
             "a scope and then call find_in_batches on it instead."
           )
 
-          apply_finder_options(options.except(:distinct))
+          apply_finder_options(options.except(:distinct), true)
             .calculate(operation, column_name, :distinct => options[:distinct])
         else
           super
@@ -86,7 +90,7 @@ module ActiveRecord
         options = args.extract_options!
 
         if options.present?
-          scope = apply_finder_options(options)
+          scope = apply_finder_options(options, true)
 
           case finder = args.first
           when :first, :last, :all
@@ -133,7 +137,7 @@ module ActiveRecord
               "a scope and then call #first on it instead."
             )
 
-            apply_finder_options(args.first).first
+            apply_finder_options(args.first, true).first
           end
         end
       end
@@ -150,7 +154,7 @@ module ActiveRecord
               "a scope and then call #last on it instead."
             )
 
-            apply_finder_options(args.first).last
+            apply_finder_options(args.first, true).last
           end
         end
       end
@@ -164,7 +168,7 @@ module ActiveRecord
             "a scope and then call #all on it instead."
           )
 
-          apply_finder_options(args.first).all
+          apply_finder_options(args.first, true).all
         end
       end
 

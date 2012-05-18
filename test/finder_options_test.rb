@@ -1,6 +1,19 @@
 require 'helper'
 
 describe 'apply_finder_options' do
+  before do
+    @deprecation_behavior = ActiveSupport::Deprecation.behavior
+    ActiveSupport::Deprecation.behavior = :silence
+  end
+
+  after do
+    ActiveSupport::Deprecation.behavior = @deprecation_behavior
+  end
+
+  it 'is deprecated' do
+    assert_deprecated { Post.scoped.apply_finder_options(:conditions => 'foo') }
+  end
+
   it 'supports :conditions' do
     scope = Post.scoped.apply_finder_options(:conditions => 'foo')
     scope.where_values.must_equal ['foo']

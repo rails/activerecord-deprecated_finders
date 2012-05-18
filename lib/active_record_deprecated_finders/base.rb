@@ -43,7 +43,7 @@ module ActiveRecord
         end
 
         if result.is_a?(Hash)
-          @klass.unscoped.apply_finder_options(result)
+          @klass.unscoped.apply_finder_options(result, true)
         else
           result
         end
@@ -68,7 +68,7 @@ module ActiveRecord
           "instead."
         )
 
-        super().apply_finder_options(options)
+        super().apply_finder_options(options, true)
       else
         super
       end
@@ -146,7 +146,7 @@ MSG
     private
 
     def construct_finder_arel(options = {}, scope = nil)
-      relation = options.is_a?(Hash) ? unscoped.apply_finder_options(options) : options
+      relation = options.is_a?(Hash) ? unscoped.apply_finder_options(options, true) : options
       relation = scope.merge(relation) if scope
       relation
     end
