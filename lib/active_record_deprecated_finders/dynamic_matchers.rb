@@ -1,8 +1,47 @@
+require 'active_support/deprecation'
+
 module ActiveRecord
   module DynamicMatchers
+    module DeprecatedFinder
+      def body
+        <<-CODE
+          result = #{super}
+          result && block_given? ? yield(result) : result
+        CODE
+      end
+
+      def result
+        "scoped.apply_finder_options(options).#{super}"
+      end
+
+      def signature
+        "#{super}, options = {}"
+      end
+    end
+
+    module DeprecationWarning
+      def body
+        "#{deprecation_warning}\n#{super}"
+      end
+
+      def deprecation_warning
+        %{ActiveSupport::Deprecation.warn("This dynamic method is deprecated. Please use e.g. #{deprecation_alternative} instead.")}
+      end
+    end
+
+    class FindBy
+      include DeprecatedFinder
+    end
+
+    class FindByBang
+      include DeprecatedFinder
+    end
+
     class FindAllBy < Method
       Method.matchers << self
       include Finder
+      include DeprecatedFinder
+      include DeprecationWarning
 
       def self.prefix
         "find_all_by"
@@ -15,11 +54,17 @@ module ActiveRecord
       def result
         "#{super}.to_a"
       end
+
+      def deprecation_alternative
+        "Post.where(...).all"
+      end
     end
 
     class FindLastBy < Method
       Method.matchers << self
       include Finder
+      include DeprecatedFinder
+      include DeprecationWarning
 
       def self.prefix
         "find_last_by"
@@ -32,23 +77,33 @@ module ActiveRecord
       def result
         "#{super}.last"
       end
+
+      def deprecation_alternative
+        "Post.where(...).last"
+      end
     end
 
     class ScopedBy < Method
       Method.matchers << self
       include Finder
+      include DeprecationWarning
 
       def self.prefix
         "scoped_by"
       end
 
       def body
-        "where(#{attributes_hash})"
+        "#{deprecation_warning} \n where(#{attributes_hash})"
+      end
+
+      def deprecation_alternative
+        "Post.where(...)"
       end
     end
 
     class Instantiator < Method
-      # This is nasty, but it doesn't matter because it will be deprecated.
+      include DeprecationWarning
+
       def self.dispatch(klass, attribute_names, instantiator, args, block)
         if args.length == 1 && args.first.is_a?(Hash)
           attributes = args.first.stringify_keys
@@ -70,7 +125,10 @@ module ActiveRecord
       end
 
       def body
-        "#{self.class}.dispatch(self, #{attribute_names.inspect}, #{instantiator.inspect}, args, block)"
+        <<-CODE
+          #{deprecation_warning}
+          #{self.class}.dispatch(self, #{attribute_names.inspect}, #{instantiator.inspect}, args, block)
+        CODE
       end
 
       def instantiator
@@ -88,6 +146,10 @@ module ActiveRecord
       def instantiator
         "new"
       end
+
+      def deprecation_alternative
+        "Post.where(...).first_or_initialize"
+      end
     end
 
     class FindOrCreateBy < Instantiator
@@ -99,6 +161,10 @@ module ActiveRecord
 
       def instantiator
         "create"
+      end
+
+      def deprecation_alternative
+        "Post.where(...).first_or_create"
       end
     end
 
@@ -116,27 +182,10 @@ module ActiveRecord
       def instantiator
         "create!"
       end
-    end
 
-    module DeprecatedFinder
-      def body
-        <<-CODE
-          result = #{super}
-          result && block_given? ? yield(result) : result
-        CODE
+      def deprecation_alternative
+        "Post.where(...).first_or_create!"
       end
-
-      def result
-        "scoped.apply_finder_options(options).#{super}"
-      end
-
-      def signature
-        "#{super}, options = {}"
-      end
-    end
-
-    [FindBy, FindByBang, FindAllBy, FindLastBy].each do |klass|
-      klass.send(:include, DeprecatedFinder)
     end
   end
 end

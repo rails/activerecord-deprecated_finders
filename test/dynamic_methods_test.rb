@@ -15,51 +15,59 @@ describe 'dynamic_methods' do
   end
 
   it 'supports find_all_by' do
-    Post.find_all_by_title('bar').must_equal [@posts[1], @posts[2]]
-    Post.find_all_by_title_and_category('bar', '2').must_equal [@posts[2]]
+    assert_deprecated do
+      Post.find_all_by_title('bar').must_equal [@posts[1], @posts[2]]
+      Post.find_all_by_title_and_category('bar', '2').must_equal [@posts[2]]
+    end
   end
 
   it 'supports find_all_by with finder options' do
-    Post.find_all_by_title('bar', conditions: { category: '1' }).must_equal [@posts[1]]
+    assert_deprecated do
+      Post.find_all_by_title('bar', conditions: { category: '1' }).must_equal [@posts[1]]
+    end
   end
 
   it 'supports find_last_by' do
-    Post.find_last_by_title('foo').must_equal @posts[0]
-    Post.find_last_by_title('bar').must_equal @posts[2]
+    assert_deprecated do
+      Post.find_last_by_title('foo').must_equal @posts[0]
+      Post.find_last_by_title('bar').must_equal @posts[2]
+    end
   end
 
   it 'supports find_last_by with finder options' do
-    Post.find_last_by_title('bar', conditions: { category: '1' }).must_equal @posts[1]
+    assert_deprecated do
+      Post.find_last_by_title('bar', conditions: { category: '1' }).must_equal @posts[1]
+    end
   end
 
   it 'supports scoped_by' do
-    scope = Post.scoped_by_title('bar')
+    scope = assert_deprecated { Post.scoped_by_title('bar') }
     scope.is_a?(ActiveRecord::Relation).must_equal true
     scope.to_a.must_equal [@posts[1], @posts[2]]
   end
 
   it 'supports find_or_initialize_by' do
-    Post.find_or_initialize_by_title_and_category('bar', '1').must_equal @posts[1]
+    assert_deprecated { Post.find_or_initialize_by_title_and_category('bar', '1').must_equal @posts[1] }
 
-    post = Post.find_or_initialize_by_title_and_category('bar', '3')
+    post = assert_deprecated { Post.find_or_initialize_by_title_and_category('bar', '3') }
     post.new_record?.must_equal true
     post.title.must_equal 'bar'
     post.category.must_equal '3'
   end
 
   it 'supports find_or_create_by' do
-    Post.find_or_create_by_title_and_category('bar', '1').must_equal @posts[1]
+    assert_deprecated { Post.find_or_create_by_title_and_category('bar', '1').must_equal @posts[1] }
 
-    post = Post.find_or_create_by_title_and_category('bar', '3')
+    post = assert_deprecated { Post.find_or_create_by_title_and_category('bar', '3') }
     post.new_record?.must_equal false
     post.title.must_equal 'bar'
     post.category.must_equal '3'
   end
 
   it 'supports find_or_create_by!' do
-    Post.find_or_create_by_title_and_category!('bar', '1').must_equal @posts[1]
+    assert_deprecated { Post.find_or_create_by_title_and_category!('bar', '1').must_equal @posts[1] }
 
-    post = Post.find_or_create_by_title_and_category!('bar', '3')
+    post = assert_deprecated { Post.find_or_create_by_title_and_category!('bar', '3') }
     post.new_record?.must_equal false
     post.title.must_equal 'bar'
     post.category.must_equal '3'
@@ -69,7 +77,9 @@ describe 'dynamic_methods' do
     klass.table_name = 'posts'
     klass.validates_presence_of :category
 
-    lambda { klass.find_or_create_by_title!('z') }.must_raise ActiveRecord::RecordInvalid
+    lambda {
+      ActiveSupport::Deprecation.silence { klass.find_or_create_by_title!('z') }
+    }.must_raise ActiveRecord::RecordInvalid
   end
 
   it 'supports find_by with finder options' do
@@ -92,7 +102,7 @@ describe 'dynamic_methods' do
 
   it 'adds to an association when find_or_initialize_by is called' do
     post = @posts.first
-    comment = post.comments.find_or_initialize_by_title('omg')
+    comment = ActiveSupport::Deprecation.silence { post.comments.find_or_initialize_by_title('omg') }
     post.comments.must_equal [comment]
   end
 
@@ -100,7 +110,7 @@ describe 'dynamic_methods' do
     post = @posts.first
     post.comments.load_target
 
-    comment = post.comments.find_or_create_by_title('omg')
+    comment = ActiveSupport::Deprecation.silence { post.comments.find_or_create_by_title('omg') }
     post.comments.must_equal [comment]
     post.reload.comments.must_equal [comment]
   end
