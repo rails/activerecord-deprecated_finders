@@ -29,12 +29,33 @@ module ActiveRecord
       end
     end
 
+    module FindByDeprecationWarning
+      def body
+        <<-CODE
+          if block_given?
+            ActiveSupport::Deprecation.warn("Calling find_by or find_by! methods with a block is deprecated with no replacement.")
+          end
+
+          unless options.empty?
+            ActiveSupport::Deprecation.warn(
+              "Calling find_by or find_by! methods with options is deprecated. " \
+              "Build a scope instead, e.g. User.where('age > 21').find_by_name('Jon')."
+            )
+          end
+
+          #{super}
+        CODE
+      end
+    end
+
     class FindBy
       include DeprecatedFinder
+      include FindByDeprecationWarning
     end
 
     class FindByBang
       include DeprecatedFinder
+      include FindByDeprecationWarning
     end
 
     class FindAllBy < Method

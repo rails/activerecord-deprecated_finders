@@ -83,21 +83,32 @@ describe 'dynamic_methods' do
   end
 
   it 'supports find_by with finder options' do
-    Post.find_by_title('bar', conditions: { category: '2' }).must_equal @posts[2]
+    assert_deprecated do
+      Post.find_by_title('bar', conditions: { category: '2' }).must_equal @posts[2]
+    end
   end
 
   it 'supports find_by! with finder options' do
-    Post.find_by_title!('bar', conditions: { category: '2' }).must_equal @posts[2]
-    lambda { Post.find_by_title!('bar', conditions: { category: '3' }) }.must_raise ActiveRecord::RecordNotFound
+    assert_deprecated do
+      Post.find_by_title!('bar', conditions: { category: '2' }).must_equal @posts[2]
+    end
+
+    lambda {
+      assert_deprecated { Post.find_by_title!('bar', conditions: { category: '3' }) }
+    }.must_raise ActiveRecord::RecordNotFound
   end
 
   it 'supports find_by with a block' do
-    Post.find_by_title('foo') { |r| [r, 'block'] }.must_equal [@posts[0], 'block']
-    Post.find_by_title('baz') { |r| [r, 'block'] }.must_equal nil
+    assert_deprecated do
+      Post.find_by_title('foo') { |r| [r, 'block'] }.must_equal [@posts[0], 'block']
+      Post.find_by_title('baz') { |r| [r, 'block'] }.must_equal nil
+    end
   end
 
   it 'supports find_by! with a block' do
-    Post.find_by_title!('foo') { |r| [r, 'block'] }.must_equal [@posts[0], 'block']
+    assert_deprecated do
+      Post.find_by_title!('foo') { |r| [r, 'block'] }.must_equal [@posts[0], 'block']
+    end
   end
 
   it 'adds to an association when find_or_initialize_by is called' do
