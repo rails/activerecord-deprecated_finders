@@ -8,8 +8,11 @@ describe 'associations' do
   end
 
   it 'translates hash scope options into scopes' do
+    extension = Module.new
+
     @klass.has_many :comments, readonly: 'a', order: 'b', limit: 'c', group: 'd', having: 'e',
-                              offset: 'f', select: 'g', uniq: 'h', include: 'i', conditions: 'j'
+                               offset: 'f', select: 'g', uniq: 'h', include: 'i', conditions: 'j',
+                               extend: extension
 
     scope = @klass.new.comments
 
@@ -23,6 +26,7 @@ describe 'associations' do
     scope.uniq_value.must_equal 'h'
     scope.includes_values.must_equal ['i']
     scope.where_values.must_include 'j'
+    scope.extensions.must_equal [extension]
   end
 
   it 'supports proc where values' do

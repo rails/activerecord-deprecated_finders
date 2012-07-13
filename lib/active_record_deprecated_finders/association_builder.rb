@@ -6,8 +6,9 @@ module ActiveRecord::Associations::Builder
     attr_reader :options
 
     def initialize(options)
-      options[:includes] = options.delete(:include)    if options[:include]
-      options[:where]    = options.delete(:conditions) if options[:conditions]
+      options[:includes]  = options.delete(:include)    if options[:include]
+      options[:where]     = options.delete(:conditions) if options[:conditions]
+      options[:extending] = options.delete(:extend)     if options[:extend]
 
       @options = options
     end
@@ -33,7 +34,7 @@ module ActiveRecord::Associations::Builder
   class Association
     # FIXME: references should not be in this list
     DEPRECATED_OPTIONS = [:readonly, :references, :order, :limit, :group, :having,
-                          :offset, :select, :uniq, :include, :conditions]
+                          :offset, :select, :uniq, :include, :conditions, :extend]
 
     # FIXME: or this list...
     self.valid_options += [:select, :conditions, :include, :extend, :readonly, :references]
