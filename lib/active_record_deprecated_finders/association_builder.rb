@@ -35,6 +35,9 @@ module ActiveRecord::Associations::Builder
     DEPRECATED_OPTIONS = [:readonly, :references, :order, :limit, :group, :having,
                           :offset, :select, :uniq, :include, :conditions]
 
+    # FIXME: or this list...
+    self.valid_options += [:select, :conditions, :include, :extend, :readonly, :references]
+
     def initialize_with_deprecated_options(*args)
       initialize_without_deprecated_options(*args)
 
@@ -49,5 +52,13 @@ module ActiveRecord::Associations::Builder
     end
 
     alias_method_chain :initialize, :deprecated_options
+  end
+
+  class CollectionAssociation
+    include Module.new {
+      def valid_options
+        super + [:order, :group, :having, :limit, :offset, :uniq]
+      end
+    }
   end
 end
