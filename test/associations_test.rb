@@ -39,4 +39,13 @@ describe 'associations' do
     @klass.has_many :comments, conditions: proc { title }
     @klass.new(title: 'omg').comments.where_values.must_include 'omg'
   end
+
+  it 'allows an extend option plus a block extension' do
+    mod = Module.new { def foo; 'foo'; end }
+    @klass.has_many(:comments, extend: mod) { def bar; 'bar'; end }
+
+    obj = @klass.new
+    obj.comments.foo.must_equal 'foo'
+    obj.comments.bar.must_equal 'bar'
+  end
 end

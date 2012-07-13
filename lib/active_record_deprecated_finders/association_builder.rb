@@ -39,17 +39,20 @@ module ActiveRecord::Associations::Builder
     # FIXME: or this list...
     self.valid_options += [:select, :conditions, :include, :extend, :readonly, :references]
 
-    def initialize_with_deprecated_options(*args)
-      initialize_without_deprecated_options(*args)
-
-      unless scope
+    def initialize_with_deprecated_options(model, name, scope, options)
+      unless options
+        options            = scope
         deprecated_options = options.slice(*DEPRECATED_OPTIONS)
 
-        unless deprecated_options.empty?
-          @scope   = DeprecatedOptionsProc.new(deprecated_options)
-          @options = options.except(*DEPRECATED_OPTIONS)
+        if deprecated_options.empty?
+          scope = nil
+        else
+          scope   = DeprecatedOptionsProc.new(deprecated_options)
+          options = options.except(*DEPRECATED_OPTIONS)
         end
       end
+
+      initialize_without_deprecated_options(model, name, scope, options)
     end
 
     alias_method_chain :initialize, :deprecated_options
