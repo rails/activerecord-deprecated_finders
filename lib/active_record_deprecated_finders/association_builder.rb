@@ -33,12 +33,10 @@ module ActiveRecord::Associations::Builder
   end
 
   class Association
-    # FIXME: references should not be in this list
-    DEPRECATED_OPTIONS = [:readonly, :references, :order, :limit, :group, :having,
+    DEPRECATED_OPTIONS = [:readonly, :order, :limit, :group, :having,
                           :offset, :select, :uniq, :include, :conditions, :extend]
 
-    # FIXME: or this list...
-    self.valid_options += [:select, :conditions, :include, :extend, :readonly, :references]
+    self.valid_options += [:select, :conditions, :include, :extend, :readonly]
 
     def initialize_with_deprecated_options(model, name, scope, options)
       if scope.is_a?(Hash)
