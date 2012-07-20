@@ -1,5 +1,6 @@
 require 'active_record/associations/builder/association'
 require 'active_support/core_ext/module/aliasing'
+require 'active_support/deprecation'
 
 module ActiveRecord::Associations::Builder
   class DeprecatedOptionsProc
@@ -47,6 +48,17 @@ module ActiveRecord::Associations::Builder
         if deprecated_options.empty?
           scope = nil
         else
+          ActiveSupport::Deprecation.warn(
+            "The following options in your #{model.name}.#{macro} :#{name} declaration are deprecated: " \
+            "#{deprecated_options.keys.map(&:inspect).join(',')}. Please use a scope block instead. " \
+            "For example, the following:\n" \
+            "\n" \
+            "    has_many :spam_comments, conditions: { spam: true }, class_name: 'Comment'\n" \
+            "\n" \
+            "should be rewritten as the following:\n" \
+            "\n" \
+            "    has_many :spam_comments, -> { where spam: true }, class_name: 'Comment'\n"
+          )
           scope   = DeprecatedOptionsProc.new(deprecated_options)
           options = options.except(*DEPRECATED_OPTIONS)
         end

@@ -10,9 +10,11 @@ describe 'associations' do
   it 'translates hash scope options into scopes' do
     extension = Module.new
 
-    @klass.has_many :comments, readonly: 'a', order: 'b', limit: 'c', group: 'd', having: 'e',
-                               offset: 'f', select: 'g', uniq: 'h', include: 'i', conditions: 'j',
-                               extend: extension
+    assert_deprecated do
+      @klass.has_many :comments, readonly: 'a', order: 'b', limit: 'c', group: 'd', having: 'e',
+                                 offset: 'f', select: 'g', uniq: 'h', include: 'i', conditions: 'j',
+                                 extend: extension
+    end
 
     scope = @klass.new.comments
 
@@ -30,19 +32,25 @@ describe 'associations' do
   end
 
   it 'supports proc where values' do
-    @klass.has_many :comments, conditions: proc { 'omg' }
+    ActiveSupport::Deprecation.silence do
+      @klass.has_many :comments, conditions: proc { 'omg' }
+    end
     @klass.new.comments.where_values.must_include 'omg'
     @klass.joins(:comments).to_sql.must_include 'omg'
   end
 
   it 'supports proc where values which access the owner' do
-    @klass.has_many :comments, conditions: proc { title }
+    ActiveSupport::Deprecation.silence do
+      @klass.has_many :comments, conditions: proc { title }
+    end
     @klass.new(title: 'omg').comments.where_values.must_include 'omg'
   end
 
   it 'allows an extend option plus a block extension' do
     mod = Module.new { def foo; 'foo'; end }
-    @klass.has_many(:comments, extend: mod) { def bar; 'bar'; end }
+    ActiveSupport::Deprecation.silence do
+      @klass.has_many(:comments, extend: mod) { def bar; 'bar'; end }
+    end
 
     obj = @klass.new
     obj.comments.foo.must_equal 'foo'
@@ -50,7 +58,9 @@ describe 'associations' do
   end
 
   it "allows a declaration with a scope with no options" do
-    @klass.has_many :comments, -> { limit 5 }
+    ActiveSupport::Deprecation.silence do
+      @klass.has_many :comments, -> { limit 5 }
+    end
     scope = @klass.new.comments
     scope.limit_value.must_equal 5
   end
