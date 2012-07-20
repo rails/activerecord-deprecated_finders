@@ -40,7 +40,7 @@ module ActiveRecord::Associations::Builder
     self.valid_options += [:select, :conditions, :include, :extend, :readonly, :references]
 
     def initialize_with_deprecated_options(model, name, scope, options)
-      unless options
+      if scope.is_a?(Hash)
         options            = scope
         deprecated_options = options.slice(*DEPRECATED_OPTIONS)
 

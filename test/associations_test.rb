@@ -48,4 +48,10 @@ describe 'associations' do
     obj.comments.foo.must_equal 'foo'
     obj.comments.bar.must_equal 'bar'
   end
+
+  it "allows a declaration with a scope with no options" do
+    @klass.has_many :comments, -> { limit 5 }
+    scope = @klass.new.comments
+    scope.limit_value.must_equal 5
+  end
 end
