@@ -21,6 +21,21 @@ describe 'finders' do
     assert_deprecated { Post.all(conditions: 'id >= 2') }.must_equal [@posts[1], @posts[2]]
   end
 
+  it 'returns an array from all when there are options' do
+    posts = ActiveSupport::Deprecation.silence { Post.all(conditions: 'id >= 2') }
+    posts.class.must_equal Array
+  end
+
+  it 'returns a relation from all when there are no options' do
+    posts = Post.all
+    posts.class.must_equal ActiveRecord::Relation
+  end
+
+  it 'deprecates #all on a relation' do
+    relation = Post.where('id >= 2')
+    assert_deprecated { relation.all }.must_equal [@posts[1], @posts[2]]
+  end
+
   it 'supports find(:first) with no options' do
     assert_deprecated { Post.order(:id).find(:first) }.must_equal @posts.first
   end

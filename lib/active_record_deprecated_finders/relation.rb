@@ -160,16 +160,8 @@ module ActiveRecord
       end
 
       def all(*args)
-        if args.empty?
-          super
-        else
-          ActiveSupport::Deprecation.warn(
-            "Relation#all with finder options is deprecated. Please build " \
-            "a scope and then call #all on it instead."
-          )
-
-          apply_finder_options(args.first, true).all
-        end
+        ActiveSupport::Deprecation.warn("Relation#all is deprecated. Please use #to_a instead.")
+        apply_finder_options(args.first, true).to_a
       end
 
       # ActiveRecord::Relation usually compiled delegator methods at runtime as an optimisation.
