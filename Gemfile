@@ -8,3 +8,5 @@ if ENV['RAILS']
 else
   gem 'rails', git: 'git://github.com/rails/rails'
 end
+
+gem 'journey', github: "rails/journey"
