@@ -74,6 +74,10 @@ module ActiveRecord
       end
     end
 
+    def all(options = nil)
+      options ? super().all(options) : super()
+    end
+
     def scope(name, body = {}, &block)
       super(name, ScopeWrapper.wrap(self, body), &block)
     end
