@@ -22,7 +22,7 @@ module ActiveRecord::Associations::Builder
           where(context.instance_eval(&options[:where]))
             .merge!(options.except(:where))
         else
-          scoped(options)
+          merge(options)
         end
       end
     end

@@ -13,4 +13,8 @@ describe 'scoped' do
     mod = Module.new
     assert_deprecated { Post.scoped(extend: mod) }.extensions.must_equal [mod]
   end
+
+  it 'is deprecated' do
+    assert_deprecated { Post.scoped }
+  end
 end

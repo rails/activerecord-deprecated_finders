@@ -59,19 +59,8 @@ module ActiveRecord
     end
 
     def scoped(options = nil)
-      deprecated_options = options && (options.keys & [:conditions, :include, :extend])
-
-      if deprecated_options.present?
-        ActiveSupport::Deprecation.warn(
-          "You have called #scoped with the following deprecated options: " \
-          "#{deprecated_options.inspect}. Please use the non-deprecated versions " \
-          "instead."
-        )
-
-        super().apply_finder_options(options, true)
-      else
-        super
-      end
+      ActiveSupport::Deprecation.warn("Model.scoped is deprecated. Please use Model.all instead.")
+      options ? all.apply_finder_options(options, true) : all
     end
 
     def all(options = nil)

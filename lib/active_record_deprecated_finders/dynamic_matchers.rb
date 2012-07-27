@@ -11,7 +11,7 @@ module ActiveRecord
       end
 
       def result
-        "scoped.apply_finder_options(options, true).#{super}"
+        "all.apply_finder_options(options, true).#{super}"
       end
 
       def signature
