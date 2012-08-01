@@ -160,7 +160,12 @@ module ActiveRecord
       end
 
       def all(*args)
-        ActiveSupport::Deprecation.warn("Relation#all is deprecated. Please use #to_a instead.")
+        ActiveSupport::Deprecation.warn(
+          "Relation#all is deprecated. If you want to eager-load a relation, you can " \
+          "call #load (e.g. `Post.where(published: true).load`). If you want " \
+          "to get an array of records from a relation, you can call #to_a (e.g. " \
+          "`Post.where(published: true).to_a`)."
+        )
         apply_finder_options(args.first, true).to_a
       end
 
