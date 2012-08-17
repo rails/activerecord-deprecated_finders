@@ -30,6 +30,6 @@ describe 'default scope' do
 
   it 'works with a block that returns a hash' do
     @klass.default_scope { { conditions: { id: 1 } } }
-    assert_deprecated { @klass.to_a }.map(&:id).must_equal [1]
+    assert_deprecated { @klass.all.to_a }.map(&:id).must_equal [1]
   end
 end
