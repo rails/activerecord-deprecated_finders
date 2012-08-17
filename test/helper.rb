@@ -1,8 +1,8 @@
 require 'bundler/setup'
-require 'active_record_deprecated_finders'
 require 'minitest/spec'
 require 'minitest/autorun'
 require 'active_record'
+require 'active_record/deprecated_finders'
 
 ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
 
