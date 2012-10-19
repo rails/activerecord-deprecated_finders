@@ -20,7 +20,6 @@ ActiveRecord::Schema.define do
 end
 
 class Post < ActiveRecord::Base
-  attr_accessible :id, :title, :category
   has_many :comments
 end
 
