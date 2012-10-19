@@ -4,3 +4,5 @@ rvm:
 notifications:
   email:
     - j@jonathanleighton.com
+before_install:
+  - gem install bundler
