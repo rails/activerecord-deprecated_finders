@@ -155,6 +155,10 @@ module ActiveRecord
       def instantiator
         raise NotImplementedError
       end
+
+      def deprecation_alternative
+        "Post.#{self.class.prefix}#{self.class.suffix}(name: 'foo')"
+      end
     end
 
     class FindOrInitializeBy < Instantiator
@@ -167,10 +171,6 @@ module ActiveRecord
       def instantiator
         "new"
       end
-
-      def deprecation_alternative
-        "Post.where(...).first_or_initialize"
-      end
     end
 
     class FindOrCreateBy < Instantiator
@@ -182,10 +182,6 @@ module ActiveRecord
 
       def instantiator
         "create"
-      end
-
-      def deprecation_alternative
-        "Post.where(...).first_or_create"
       end
     end
 
@@ -202,10 +198,6 @@ module ActiveRecord
 
       def instantiator
         "create!"
-      end
-
-      def deprecation_alternative
-        "Post.where(...).first_or_create!"
       end
     end
   end
