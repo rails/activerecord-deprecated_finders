@@ -10,3 +10,4 @@ else
 end
 
 gem 'journey', github: "rails/journey"
+gem 'sprockets-rails', github: 'rails/sprockets-rails', branch: 'master'
