@@ -8,9 +8,9 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{This gem contains deprecated finder APIs extracted from Active Record.}
   gem.homepage      = ""
 
-  s.files         = [<%= files.map(&:inspect).join ',' %>]
-  s.test_files    = [<%= test_files.map(&:inspect).join ',' %>]
-  s.executables   = [<%= executables.map(&:inspect).join ',' %>]
+  gem.files         = [<%= files.map(&:inspect).join ',' %>]
+  gem.test_files    = [<%= test_files.map(&:inspect).join ',' %>]
+  gem.executables   = [<%= executables.map(&:inspect).join ',' %>]
   gem.name          = "activerecord-deprecated_finders"
   gem.require_paths = ["lib"]
   gem.version       = ActiveRecord::DeprecatedFinders::VERSION
