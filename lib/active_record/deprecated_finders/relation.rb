@@ -168,23 +168,6 @@ module ActiveRecord
         )
         apply_finder_options(args.first, true).to_a
       end
-
-      # ActiveRecord::Relation usually compiled delegator methods at runtime as an optimisation.
-      # However, we want to hook into method_missing in CollectionProxy in order to do extra
-      # stuff around find_or_{create|initialize}_by methods. If a compiled method for the delegation
-      # is defined, then we have no way to hook in because method_missing is never invoked.
-      # Therefore, the purpose of this is simply to prevent the super implementation of
-      # method_missing being called in this case, which prevent the compiled delegation from
-      # being created.
-      def method_missing(method, *args, &block)
-        match = DynamicMatchers::Method.match(klass, method)
-
-        if match && match.is_a?(DynamicMatchers::Instantiator)
-          scoping { klass.send(method, *args, &block) }
-        else
-          super
-        end
-      end
     end
 
     include DeprecatedMethods

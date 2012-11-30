@@ -28,7 +28,7 @@ describe 'finders' do
 
   it 'returns a relation from all when there are no options' do
     posts = Post.all
-    posts.class.must_equal ActiveRecord::Relation
+    posts.is_a?(ActiveRecord::Relation).must_equal true
   end
 
   it 'deprecates #all on a relation' do
