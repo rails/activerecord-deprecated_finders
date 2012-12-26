@@ -76,7 +76,7 @@ module ActiveRecord
         if options.except(:distinct).present?
           ActiveSupport::Deprecation.warn(
             "Relation#calculate with finder options is deprecated. Please build " \
-            "a scope and then call find_in_batches on it instead."
+            "a scope and then call calculate on it instead."
           )
 
           apply_finder_options(options.except(:distinct), true)
