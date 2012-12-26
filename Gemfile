@@ -8,6 +8,3 @@ if ENV['RAILS']
 else
   gem 'rails', git: 'git://github.com/rails/rails', branch: 'master'
 end
-
-gem 'journey', github: "rails/journey"
-gem 'sprockets-rails', github: 'rails/sprockets-rails', branch: 'master'
