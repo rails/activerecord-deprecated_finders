@@ -6,7 +6,7 @@ gemspec
 if ENV['RAILS']
   gem 'rails', path: ENV['RAILS']
 else
-  gem 'rails', git: 'git://github.com/rails/rails'
+  gem 'rails', git: 'git://github.com/rails/rails', branch: 'master'
 end
 
 gem 'journey', github: "rails/journey"
