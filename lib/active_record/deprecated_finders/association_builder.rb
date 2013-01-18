@@ -9,7 +9,6 @@ module ActiveRecord::Associations::Builder
     def initialize(options)
       options[:includes]  = options.delete(:include)    if options[:include]
       options[:where]     = options.delete(:conditions) if options[:conditions]
-      options[:extending] = options.delete(:extend)     if options[:extend]
 
       @options = options
     end
@@ -34,9 +33,9 @@ module ActiveRecord::Associations::Builder
 
   class Association
     DEPRECATED_OPTIONS = [:readonly, :order, :limit, :group, :having,
-                          :offset, :select, :uniq, :include, :conditions, :extend]
+                          :offset, :select, :uniq, :include, :conditions]
 
-    self.valid_options += [:select, :conditions, :include, :extend, :readonly]
+    self.valid_options += [:select, :conditions, :include, :readonly]
 
     def initialize_with_deprecated_options(model, name, scope, options)
       if scope.is_a?(Hash)

@@ -39,12 +39,6 @@ describe 'apply_finder_options' do
     scope.offset_value.must_equal 5
   end
 
-  it 'supports :extend' do
-    mod   = Module.new
-    scope = Post.scoped.apply_finder_options(:extend => mod)
-    scope.extensions.must_include mod
-  end
-
   it "does not support :references (as it's new in 4.0)" do
     lambda { Post.scoped.apply_finder_options(references: :foo) }.must_raise ArgumentError
   end

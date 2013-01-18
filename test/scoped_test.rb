@@ -9,11 +9,6 @@ describe 'scoped' do
     assert_deprecated { Post.scoped(include: :foo) }.includes_values.must_equal [:foo]
   end
 
-  it 'accepts a deprecated extend option' do
-    mod = Module.new
-    assert_deprecated { Post.scoped(extend: mod) }.extensions.must_equal [mod]
-  end
-
   it 'is deprecated' do
     assert_deprecated { Post.scoped }
   end

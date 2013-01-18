@@ -8,12 +8,9 @@ describe 'associations' do
   end
 
   it 'translates hash scope options into scopes' do
-    extension = Module.new
-
     assert_deprecated do
       @klass.has_many :comments, readonly: 'a', order: 'b', limit: 'c', group: 'd', having: 'e',
-                                 offset: 'f', select: 'g', uniq: 'h', include: 'i', conditions: 'j',
-                                 extend: extension
+                                 offset: 'f', select: 'g', uniq: 'h', include: 'i', conditions: 'j'
     end
 
     scope = @klass.new.comments
@@ -28,7 +25,6 @@ describe 'associations' do
     scope.uniq_value.must_equal 'h'
     scope.includes_values.must_equal ['i']
     scope.where_values.must_include 'j'
-    scope.extensions.must_equal [extension]
   end
 
   it 'supports proc where values' do
@@ -44,17 +40,6 @@ describe 'associations' do
       @klass.has_many :comments, conditions: proc { title }
     end
     @klass.new(title: 'omg').comments.where_values.must_include 'omg'
-  end
-
-  it 'allows an extend option plus a block extension' do
-    mod = Module.new { def foo; 'foo'; end }
-    ActiveSupport::Deprecation.silence do
-      @klass.has_many(:comments, extend: mod) { def bar; 'bar'; end }
-    end
-
-    obj = @klass.new
-    obj.comments.foo.must_equal 'foo'
-    obj.comments.bar.must_equal 'bar'
   end
 
   it "allows a declaration with a scope with no options" do
