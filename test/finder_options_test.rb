@@ -44,8 +44,8 @@ describe 'apply_finder_options' do
   end
 
   it 'supports :order' do
-    scope = Post.scoped.apply_finder_options(:order => :foo)
-    scope.order_values.must_equal [:foo]
+    scope = Post.scoped.apply_finder_options(:order => 'foo')
+    scope.order_values.must_equal ['foo']
   end
 
   it 'supports :select' do
