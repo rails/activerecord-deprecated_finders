@@ -16,7 +16,7 @@ deps = `git ls-files`.split("\n") - [specname]
 task :gemspec => specname
 
 file specname => deps do
-  files       = `git ls-files`.split("\n")
+  files       = `git ls-files`.split("\n") - Dir["gemfiles/*"]
   test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
   executables = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
 

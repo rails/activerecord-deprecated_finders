@@ -1,8 +1,13 @@
 language: ruby
 rvm:
   - 1.9.3
+  - 2.0.0
+gemfile:
+  - gemfiles/Gemfile-edge
+  - Gemfile
 notifications:
   email:
     - j@jonathanleighton.com
+    - rafaelmfranca@gmail.com
 before_install:
   - gem install bundler
