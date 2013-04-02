@@ -38,10 +38,16 @@ module ActiveRecord::Associations::Builder
     self.valid_options += [:select, :conditions, :include, :readonly]
 
     def initialize_with_deprecated_options(model, name, scope, options)
-      if scope.is_a?(Hash)
-        options            = scope
-        deprecated_options = options.slice(*DEPRECATED_OPTIONS)
+      options            = scope if scope.is_a?(Hash)
+      deprecated_options = options.slice(*DEPRECATED_OPTIONS)
 
+      if scope.respond_to?(:call) && !deprecated_options.empty?
+        raise ArgumentError,
+          "Invalid mix of scope block and deprecated finder options on " \
+          "ActiveRecord association: #{model.name}.#{macro} :#{name}"
+      end
+
+      if scope.is_a?(Hash)
         if deprecated_options.empty?
           scope = nil
         else
