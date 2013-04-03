@@ -49,4 +49,10 @@ describe 'associations' do
     scope = @klass.new.comments
     scope.limit_value.must_equal 5
   end
+
+  it "raises an ArgumentError when declaration uses both scope and deprecated options" do
+    assert_raises(ArgumentError) do
+      @klass.has_many :comments, -> { limit 5 }, :order=>'b'
+    end
+  end
 end
