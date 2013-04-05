@@ -17,6 +17,19 @@ ActiveRecord::Schema.define do
     t.string :title
     t.references :post
   end
+
+  create_table :appointments do |t|
+    t.integer :physician_id
+    t.integer :patient_id
+  end
+
+  create_table :physicians do |t|
+    t.string :name
+  end
+
+  create_table :patients do |t|
+    t.string :name
+  end
 end
 
 class Post < ActiveRecord::Base
@@ -27,6 +40,19 @@ class Comment < ActiveRecord::Base
   def self.lol
     "lol"
   end
+end
+
+class Appointment < ActiveRecord::Base
+  belongs_to :physician
+  belongs_to :patient
+end
+
+class Patient < ActiveRecord::Base
+end
+
+class Physician < ActiveRecord::Base
+  has_many :appointments
+  has_many :patients, through: :appointments
 end
 
 require 'active_support/testing/deprecation'
