@@ -7,6 +7,14 @@ describe 'associations' do
     @klass.table_name = 'posts'
   end
 
+  it 'find_or_create_by on has_many through should work' do
+    physician = Physician.create!
+    ActiveSupport::Deprecation.silence do
+      physician.patients.find_or_create_by_name('Tim')
+    end
+    assert_equal 1, Appointment.count
+  end
+
   it 'translates hash scope options into scopes' do
     assert_deprecated do
       @klass.has_many :comments, readonly: 'a', order: 'b', limit: 'c', group: 'd', having: 'e',
