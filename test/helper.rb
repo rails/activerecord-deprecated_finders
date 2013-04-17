@@ -21,6 +21,8 @@ ActiveRecord::Schema.define do
   create_table :appointments do |t|
     t.integer :physician_id
     t.integer :patient_id
+    t.string :week_day
+    t.string :status
   end
 
   create_table :physicians do |t|
