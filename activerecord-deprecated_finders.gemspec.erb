@@ -4,7 +4,7 @@ require File.expand_path('../lib/active_record/deprecated_finders/version', __FI
 Gem::Specification.new do |gem|
   gem.authors       = ["Jon Leighton"]
   gem.email         = ["j@jonathanleighton.com"]
-  gem.description   = %q{This gem contains deprecated finder APIs extracted from Active Record.}
+  gem.description   = %q{Deprecated finder APIs extracted from Active Record.}
   gem.summary       = %q{This gem contains deprecated finder APIs extracted from Active Record.}
   gem.homepage      = "https://github.com/rails/activerecord-deprecated_finders"
 
