@@ -6,7 +6,7 @@ module ActiveRecord
           match = DynamicMatchers::Method.match(klass, method)
           sanitized_method = match.class.prefix + match.class.suffix if match
 
-          if match && self.respond_to?(sanitized_method)
+          if match && self.respond_to?(sanitized_method) && proxy_association.reflection.options[:through].present?
             self.send(sanitized_method, Hash[match.attribute_names.zip(args)])
 
           elsif match && match.is_a?(DynamicMatchers::Instantiator)

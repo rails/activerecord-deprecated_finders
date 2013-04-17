@@ -5,6 +5,7 @@ describe 'associations' do
     @klass = Class.new(ActiveRecord::Base)
     def @klass.name; 'Post'; end
     @klass.table_name = 'posts'
+    Appointment.delete_all
   end
 
   it 'find_or_create_by on has_many through should work' do
@@ -13,6 +14,14 @@ describe 'associations' do
       physician.patients.find_or_create_by_name('Tim')
     end
     assert_equal 1, Appointment.count
+  end
+
+  it 'find_or_create_by on has_many should work' do
+    physician = Physician.create!
+    ActiveSupport::Deprecation.silence do
+      appointment = physician.appointments.find_or_create_by_status(status: 'active', week_day: 'sunday')
+      assert_equal appointment, physician.appointments.find_or_create_by_status(status: 'active', week_day: 'sunday')
+    end
   end
 
   it 'translates hash scope options into scopes' do
