@@ -50,6 +50,9 @@ class Appointment < ActiveRecord::Base
 end
 
 class Patient < ActiveRecord::Base
+  def self.find_by_custom_name
+    []
+  end
 end
 
 class Physician < ActiveRecord::Base
