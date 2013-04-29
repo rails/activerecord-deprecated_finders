@@ -4,15 +4,17 @@ module ActiveRecord
       module InterceptDynamicInstantiators
         def method_missing(method, *args, &block)
           match = DynamicMatchers::Method.match(klass, method)
-          sanitized_method = match.class.prefix + match.class.suffix if match
 
-          if match && self.respond_to?(sanitized_method) && proxy_association.reflection.options[:through].present?
-            self.send(sanitized_method, Hash[match.attribute_names.zip(args)])
-
-          elsif match && match.is_a?(DynamicMatchers::Instantiator)
+          if match && match.is_a?(DynamicMatchers::Instantiator)
             scoping do
               klass.send(method, *args) do |record|
-                proxy_association.add_to_target(record)
+
+                sanitized_method = match.class.prefix + match.class.suffix
+                if %w(find_or_create_by find_or_create_by!).include?(sanitized_method) && proxy_association.reflection.options[:through].present?
+                  proxy_association.send(:save_through_record, record)
+                else
+                  proxy_association.add_to_target(record)
+                end
                 yield record if block_given?
               end
             end

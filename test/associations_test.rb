@@ -8,10 +8,26 @@ describe 'associations' do
     Appointment.delete_all
   end
 
+  it 'should respect find_by_anything method defined on the base class' do
+    physician = Physician.create!
+
+    ActiveSupport::Deprecation.silence do
+      assert_equal [], physician.patients.find_by_custom_name
+    end
+  end
+
   it 'find_or_create_by on has_many through should work' do
     physician = Physician.create!
     ActiveSupport::Deprecation.silence do
       physician.patients.find_or_create_by_name('Tim')
+    end
+    assert_equal 1, Appointment.count
+  end
+
+  it 'find_or_create_by with bang on has_many through should work' do
+    physician = Physician.create!
+    ActiveSupport::Deprecation.silence do
+      physician.patients.find_or_create_by_name!('Tim')
     end
     assert_equal 1, Appointment.count
   end
