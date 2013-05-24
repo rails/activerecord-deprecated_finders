@@ -38,7 +38,7 @@ module ActiveRecord
           ActiveSupport::Deprecation.warn(
             "Relation#update_all with conditions is deprecated. Please use " \
             "Item.where(color: 'red').update_all(...) rather than " \
-            "Item.update_all(..., color: 'red')."
+            "Item.update_all(..., color: 'red').", caller
           )
         end
 
@@ -47,7 +47,7 @@ module ActiveRecord
 
           ActiveSupport::Deprecation.warn(
             "Relation#update_all with :limit / :order options is deprecated. " \
-            "Please use e.g. Post.limit(1).order(:foo).update_all instead."
+            "Please use e.g. Post.limit(1).order(:foo).update_all instead.", caller
           )
         end
 
@@ -58,7 +58,7 @@ module ActiveRecord
         if (finder_options = options.except(:start, :batch_size)).present?
           ActiveSupport::Deprecation.warn(
             "Relation#find_in_batches with finder options is deprecated. Please build " \
-            "a scope and then call find_in_batches on it instead."
+            "a scope and then call find_in_batches on it instead.", caller
           )
 
           raise "You can't specify an order, it's forced to be #{batch_order}" if options[:order].present?
@@ -75,7 +75,7 @@ module ActiveRecord
         if options.except(:distinct).present?
           ActiveSupport::Deprecation.warn(
             "Relation#calculate with finder options is deprecated. Please build " \
-            "a scope and then call calculate on it instead."
+            "a scope and then call calculate on it instead.", caller
           )
 
           apply_finder_options(options.except(:distinct), true)
@@ -97,14 +97,14 @@ module ActiveRecord
               "Calling #find(#{finder.inspect}) is deprecated. Please call " \
               "##{finder} directly instead. You have also used finder options. " \
               "These are also deprecated. Please build a scope instead of using " \
-              "finder options."
+              "finder options.", caller
             )
 
             scope.send(finder)
           else
             ActiveSupport::Deprecation.warn(
               "Passing options to #find is deprecated. Please build a scope " \
-              "and then call #find on it."
+              "and then call #find on it.", caller
             )
 
             scope.find(*args)
@@ -114,7 +114,7 @@ module ActiveRecord
           when :first, :last, :all
             ActiveSupport::Deprecation.warn(
               "Calling #find(#{finder.inspect}) is deprecated. Please call " \
-              "##{finder} directly instead."
+              "##{finder} directly instead.", caller
             )
 
             send(finder)
@@ -133,7 +133,7 @@ module ActiveRecord
           else
             ActiveSupport::Deprecation.warn(
               "Relation#first with finder options is deprecated. Please build " \
-              "a scope and then call #first on it instead."
+              "a scope and then call #first on it instead.", caller
             )
 
             apply_finder_options(args.first, true).first
@@ -150,7 +150,7 @@ module ActiveRecord
           else
             ActiveSupport::Deprecation.warn(
               "Relation#last with finder options is deprecated. Please build " \
-              "a scope and then call #last on it instead."
+              "a scope and then call #last on it instead.", caller
             )
 
             apply_finder_options(args.first, true).last
@@ -163,7 +163,7 @@ module ActiveRecord
           "Relation#all is deprecated. If you want to eager-load a relation, you can " \
           "call #load (e.g. `Post.where(published: true).load`). If you want " \
           "to get an array of records from a relation, you can call #to_a (e.g. " \
-          "`Post.where(published: true).to_a`)."
+          "`Post.where(published: true).to_a`).", caller
         )
         apply_finder_options(args.first, true).to_a
       end
