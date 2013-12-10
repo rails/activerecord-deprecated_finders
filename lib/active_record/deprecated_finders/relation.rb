@@ -79,7 +79,7 @@ module ActiveRecord
           )
 
           apply_finder_options(options.except(:distinct), true)
-            .calculate(operation, column_name, :distinct => options[:distinct])
+            .calculate(operation, column_name, options.slice(:distinct))
         else
           super
         end
