@@ -4,6 +4,7 @@ rvm:
   - 2.0.0
 gemfile:
   - gemfiles/Gemfile-edge
+  - gemfiles/Gemfile-4-0-stable
   - Gemfile
 notifications:
   email: false
