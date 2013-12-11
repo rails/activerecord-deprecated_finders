@@ -13,16 +13,18 @@ describe 'calculate' do
     assert_deprecated { Post.calculate(:sum, :id, conditions: { title: 'foo' }) }.must_equal 5
   end
 
-  it 'should pass :distinct option along' do
-    Post.create id: 1, title: "foo"
-    Post.create id: 2, title: "bar"
-    Post.create id: 3, title: "bar"
-    Post.create id: 4, title: "baz"
+  if active_record_4_0?
+    it 'should pass :distinct option along' do
+      Post.create id: 1, title: "foo"
+      Post.create id: 2, title: "bar"
+      Post.create id: 3, title: "bar"
+      Post.create id: 4, title: "baz"
 
-    _result, deprecations = collect_deprecations do
-      Post.count(:title, conditions: { title: ["bar", "baz"] }, distinct: true).must_equal 2
+      _result, deprecations = collect_deprecations do
+        Post.count(:title, conditions: { title: ["bar", "baz"] }, distinct: true).must_equal 2
+      end
+      assert_equal 2, deprecations.size, deprecations
     end
-    assert_equal 2, deprecations.size, deprecations
   end
 
   it 'should not issue :distinct deprecation warning when :distinct was not passed' do

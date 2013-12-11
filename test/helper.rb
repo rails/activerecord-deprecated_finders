@@ -4,6 +4,10 @@ require 'minitest/spec'
 require 'active_record'
 require 'active_record/deprecated_finders'
 
+def active_record_4_0?
+  ActiveRecord::VERSION::MAJOR == 4 && ActiveRecord::VERSION::MINOR == 0
+end
+
 ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
 
 ActiveRecord::Schema.verbose = false
