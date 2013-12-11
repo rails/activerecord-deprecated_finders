@@ -1,6 +1,6 @@
 require 'bundler/setup'
-require 'minitest/spec'
 require 'minitest/autorun'
+require 'minitest/spec'
 require 'active_record'
 require 'active_record/deprecated_finders'
 
