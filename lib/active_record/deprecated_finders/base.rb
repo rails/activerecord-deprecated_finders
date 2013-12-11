@@ -92,7 +92,10 @@ module ActiveRecord
 
         scope.assert_valid_keys([ :find, :create ])
         relation = construct_finder_arel(scope[:find] || {})
-        relation.default_scoped = true unless action == :overwrite
+
+        if relation.respond_to?(:default_scoped=)
+          relation.default_scoped = true unless action == :overwrite
+        end
 
         if previous_scope && previous_scope.create_with_value && scope[:create]
           scope_for_create = if action == :merge
