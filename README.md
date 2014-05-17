@@ -6,6 +6,10 @@ functionality.
 It will be removed as a dependency in Rails 4.1, but users can manually include
 it in their Gemfile and it will continue to be maintained until Rails 5.
 
+```ruby
+gem 'activerecord-deprecated_finders', require: 'active_record/deprecated_finders'
+```
+
 This gem is used to extract and deprecate old-style finder option hashes in
 Active Record:
 
