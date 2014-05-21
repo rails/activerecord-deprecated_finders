@@ -5,6 +5,7 @@ rvm:
   - 2.1
 gemfile:
   - gemfiles/Gemfile-edge
+  - gemfiles/Gemfile-4-0
   - gemfiles/Gemfile-4-0-stable
   - gemfiles/Gemfile-4-1-stable
   - Gemfile
