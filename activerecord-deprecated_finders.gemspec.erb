@@ -14,6 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "activerecord-deprecated_finders"
   gem.require_paths = ["lib"]
   gem.version       = ActiveRecord::DeprecatedFinders::VERSION
+  gem.license       = 'MIT'
 
   gem.add_development_dependency 'minitest',     '>= 3'
   gem.add_development_dependency 'activerecord', '>= 4.0.0.beta', '< 5'
