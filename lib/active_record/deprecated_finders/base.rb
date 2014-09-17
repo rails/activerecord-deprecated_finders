@@ -43,7 +43,7 @@ module ActiveRecord
         end
 
         if result.is_a?(Hash)
-          @klass.unscoped.apply_finder_options(result, true)
+          @klass.all.apply_finder_options(result, true)
         else
           result
         end
