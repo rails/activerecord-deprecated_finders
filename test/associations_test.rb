@@ -65,7 +65,9 @@ describe 'associations' do
       @klass.has_many :comments, conditions: proc { 'omg' }
     end
     @klass.new.comments.where_values.must_include 'omg'
-    @klass.joins(:comments).to_sql.must_include 'omg'
+    ActiveSupport::Deprecation.silence do
+      @klass.joins(:comments).to_sql.must_include 'omg'
+    end
   end
 
   it 'supports proc where values which access the owner' do
