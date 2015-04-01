@@ -29,8 +29,12 @@ module ActiveRecord
           # Ensure this get included first
           include ActiveRecord::Delegation::ClassSpecificRelation
 
-          # Now override the method_missing definition
-          include InterceptDynamicInstantiators
+          unless ActiveRecord::VERSION::MAJOR == 4 &&
+              ActiveRecord::VERSION::MINOR == 2 &&
+              ActiveRecord::VERSION::TINY > 1
+            # Now override the method_missing definition
+            include InterceptDynamicInstantiators
+          end
         end
       end
     end
