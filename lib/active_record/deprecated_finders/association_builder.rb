@@ -60,7 +60,8 @@ module ActiveRecord::Associations::Builder
             "\n" \
             "should be rewritten as the following:\n" \
             "\n" \
-            "    has_many :spam_comments, -> { where spam: true }, class_name: 'Comment'\n"
+            "    has_many :spam_comments, -> { where spam: true }, class_name: 'Comment'\n",
+            caller
           )
           scope   = DeprecatedOptionsProc.new(deprecated_options)
           options = options.except(*DEPRECATED_OPTIONS)
